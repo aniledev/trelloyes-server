@@ -1,1 +1,3 @@
+// These logs are created by winston and the logger method. They are used to help debug the problem if there was with the server
 {"message":"Unauthorized request to path: /","level":"error"}
+{"message":"Card with id 2 not found.","level":"error"}
