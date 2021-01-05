@@ -26,6 +26,22 @@ if (NODE_ENV !== "production") {
   );
 }
 
+//STORE DATA IN PLACE OF DATABASE
+const cards = [
+  {
+    id: 1,
+    title: "Task One",
+    content: "This is card one",
+  },
+];
+const lists = [
+  {
+    id: 1,
+    header: "List One",
+    cardIds: [1],
+  },
+];
+
 //STANDARD MIDDLEWARE
 app.use(morgan(morganOption));
 app.use(helmet());
