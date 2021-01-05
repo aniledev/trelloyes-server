@@ -1,3 +1,4 @@
+// import node packages and modules
 const express = require("express");
 const { v4: uuid } = require("uuid");
 const logger = require("./logger");
@@ -6,6 +7,8 @@ const { cards, lists } = require("./store");
 const cardRouter = express.Router();
 // specific that we will need a JSON body parser
 const bodyParser = express.json();
+
+const app = express();
 
 //MIDDLE WARE
 app.use(express.json());
@@ -16,19 +19,19 @@ cardRouter
   .get((req, res) => {
     res.json(cards);
   })
-  .post((req, res) => {
+  .post(bodyParser, (req, res) => {
     // get the data from the body
     const { title, content } = req.body;
 
     //validate that both the title and content exist
     if (!title) {
       logger.error(`Title is required`);
-      return res.status(400).send("Invalid data");
+      return res.status(400).send("Title not found");
     }
 
     if (!content) {
       logger.error(`Content is required`);
-      return res.status(400).send("Invalid data");
+      return res.status(400).send("Content not found");
     }
 
     // if title and content both exist, generate an ID and push a card object into the array
