@@ -7,6 +7,7 @@ const cors = require("cors");
 const winston = require("winston");
 const { v4: uuid } = require("uuid");
 const { NODE_ENV, PORT } = require("./config");
+const cardRouter = require("./card/card-router");
 
 const app = express();
 
@@ -30,7 +31,6 @@ if (NODE_ENV !== "production") {
 app.use(morgan(morganOption));
 app.use(helmet());
 app.use(cors());
-app.use(express.json());
 
 //ADD AUTHORIZATION HEADER AND API TOKEN MIDDLEWARE
 app.use(function validateBearerToken(req, res, next) {
@@ -46,18 +46,7 @@ app.use(function validateBearerToken(req, res, next) {
 });
 
 //STORE DATA IN PLACE OF DATABASE
-const cards = [
-  {
-    id: 1,
-    title: "Task One",
-    content: "This is card one",
-  },
-  {
-    id: 2,
-    title: "Task One",
-    content: "This is card one",
-  },
-];
+
 const lists = [
   {
     id: 1,
@@ -72,9 +61,7 @@ const lists = [
 ];
 
 //ROUTES
-app.get("/card", (req, res) => {
-  res.json(cards);
-});
+app.use(cardRouter);
 
 app.get("/card/:id", (req, res) => {
   const { id } = req.params;
@@ -104,37 +91,6 @@ app.get("/list/:id", (req, res) => {
   }
 
   res.json(list);
-});
-
-app.post("/card", (req, res) => {
-  // get the data from the body
-  const { title, content } = req.body;
-
-  //validate that both the title and content exist
-  if (!title) {
-    logger.error(`Title is required`);
-    return res.status(400).send("Invalid data");
-  }
-
-  if (!content) {
-    logger.error(`Content is required`);
-    return res.status(400).send("Invalid data");
-  }
-
-  // if title and content both exist, generate an ID and push a card object into the array
-  const id = uuid();
-
-  const card = {
-    id,
-    title,
-    content,
-  };
-
-  cards.push(card);
-
-  logger.info(`Card with id ${id} created`);
-
-  res.status(201).location(`http://localhost:8000/card/${id}`).json(card);
 });
 
 app.post("/list", (req, res) => {
