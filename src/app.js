@@ -1,12 +1,11 @@
-// IMPORT REQUIRED LIBRARIES AND SECURITY PACKAGES
+// IMPORT AND CONFIGURE REQUIRED LIBRARIES AND SECURITY PACKAGES
 require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
-const cors = require("cors");
 const helmet = require("helmet");
+const cors = require("cors");
 const winston = require("winston");
-``;
-const { NODE_ENV } = require("./config");
+const { NODE_ENV, PORT } = require("./config");
 
 const app = express();
 
@@ -26,6 +25,23 @@ if (NODE_ENV !== "production") {
   );
 }
 
+//STANDARD MIDDLEWARE
+app.use(morgan(morganOption));
+app.use(helmet());
+app.use(cors());
+
+//ADD AUTHORIZATION HEADER AND API TOKEN MIDDLEWARE
+app.use(function validateBearerToken(req, res, next) {
+  const apiToken = process.env.API_TOKEN;
+  const authToken = req.get("Authorization");
+
+  if (!authToken || authToken.split(" ")[1] !== apiToken) {
+    return res.status(401).json({ error: "Unauthorized request" });
+  }
+  // move to the next middleware
+  next();
+});
+
 //STORE DATA IN PLACE OF DATABASE
 const cards = [
   {
@@ -41,11 +57,6 @@ const lists = [
     cardIds: [1],
   },
 ];
-
-//STANDARD MIDDLEWARE
-app.use(morgan(morganOption));
-app.use(helmet());
-app.use(cors());
 
 //ROUTES
 app.get("/", (req, res) => {
