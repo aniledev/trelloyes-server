@@ -29,6 +29,7 @@ if (NODE_ENV !== "production") {
 app.use(morgan(morganOption));
 app.use(helmet());
 app.use(cors());
+app.use(express.json());
 
 //ADD AUTHORIZATION HEADER AND API TOKEN MIDDLEWARE
 app.use(function validateBearerToken(req, res, next) {
