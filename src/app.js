@@ -121,8 +121,6 @@ app.delete("/list/:id", (req, res) => {
   res.status(204).end();
 });
 
-app.delete("/card/:id", (req, res) => {});
-
 // CATCH ANY THROWN ERRORS AND THEN DEFINE THE ERROR AND KEEP THE APPLICATION RUNNING;
 //STILL MIDDLEWARE
 app.use(function errorHandler(error, req, res, next) {
