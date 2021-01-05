@@ -1,3 +1,16 @@
 // These logs are created by winston and the logger method. They are used to help debug the problem if there was with the server
 {"message":"Unauthorized request to path: /","level":"error"}
 {"message":"Card with id 2 not found.","level":"error"}
+{"message":"Title is required","level":"error"}
+{"message":"Card with id 2 not found.","level":"error"}
+{"message":"Title is required","level":"error"}
+{"message":"Title is required","level":"error"}
+{"message":"Title is required","level":"error"}
+{"message":"Title is required","level":"error"}
+{"message":"Card with id 5f45f0c7-4389-45d1-b9be-a507c6dba63b created","level":"info"}
+{"message":"Card with id 3e8d065d-fa2f-4f88-be06-0655491766d4 not found.","level":"error"}
+{"message":"Card with id 3e8d065d-fa2f-4f88-be06-0655491766d4 not found.","level":"error"}
+{"message":"Card with id 3e8d065d-fa2f-4f88-be06-0655491766d4 not found.","level":"error"}
+{"message":"Title is required","level":"error"}
+{"message":"Title is required","level":"error"}
+{"message":"Card with id ddbea41d-c500-42db-915d-a1be104e30a1 created","level":"info"}
