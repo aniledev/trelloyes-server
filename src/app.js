@@ -4,7 +4,6 @@ const express = require("express");
 const morgan = require("morgan");
 const helmet = require("helmet");
 const cors = require("cors");
-const winston = require("winston");
 const { v4: uuid } = require("uuid");
 const { NODE_ENV, PORT } = require("./config");
 const cardRouter = require("./card/card-router");
@@ -12,20 +11,6 @@ const cardRouter = require("./card/card-router");
 const app = express();
 
 const morganOption = NODE_ENV === "production" ? "tiny" : "dev";
-
-const logger = winston.createLogger({
-  level: "info",
-  format: winston.format.json(),
-  transports: [new winston.transports.File({ filename: "info.log" })],
-});
-
-if (NODE_ENV !== "production") {
-  logger.add(
-    new winston.transports.Console({
-      format: winston.format.simple(),
-    })
-  );
-}
 
 //STANDARD MIDDLEWARE
 app.use(morgan(morganOption));
@@ -62,19 +47,6 @@ const lists = [
 
 //ROUTES
 app.use(cardRouter);
-
-app.get("/card/:id", (req, res) => {
-  const { id } = req.params;
-  const card = cards.find((c) => c.id == id);
-
-  // make sure we found a card
-  if (!card) {
-    logger.error(`Card with id ${id} not found.`);
-    return res.status(404).send("Card Not Found");
-  }
-
-  res.json(card);
-});
 
 app.get("/list", (req, res) => {
   res.json(lists);
@@ -149,30 +121,7 @@ app.delete("/list/:id", (req, res) => {
   res.status(204).end();
 });
 
-app.delete("/card/:id", (req, res) => {
-  const { id } = req.params;
-
-  const cardIndex = cards.findIndex((c) => c.id == id);
-
-  // and index of -1 means that there is no match; it does not exist in the array
-  if (cardIndex === -1) {
-    logger.error(`Card with id ${id} not found.`);
-    return res.status(404).send("Not found");
-  }
-
-  //remove card from lists
-  //assume cardIds are not duplicated in the cardIds array
-  lists.forEach((list) => {
-    const cardIds = list.cardIds.filter((cid) => cid !== id);
-    list.cardIds = cardIds;
-  });
-
-  cards.splice(cardIndex, 1);
-
-  logger.info(`Card with id ${id} deleted.`);
-
-  res.status(204).end();
-});
+app.delete("/card/:id", (req, res) => {});
 
 // CATCH ANY THROWN ERRORS AND THEN DEFINE THE ERROR AND KEEP THE APPLICATION RUNNING;
 //STILL MIDDLEWARE
